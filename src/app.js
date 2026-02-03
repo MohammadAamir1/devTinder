@@ -48,13 +48,13 @@ app.use("/test", (req,res) => {
 
 // app.use("/route", [rH1, rH2,rH3, rH4, rH5]);
 // app.use("/route", [rH1, rH2],rH3, rH4, rH5);
-app.use("/user", [
+/*app.get("/user", [
     (req,res,next) => {
     //route handler
     //res.send("Route Handle 1");
     console.log("Handling the route user!")
     next();
-    // res.send("Response!!");
+    res.send("Response!!");
 }, 
    (req,res,next) => {
     // route handler 2
@@ -68,7 +68,63 @@ app.use("/user", [
     // res.send("3rd Response!!");
     next();
 },
-]);
+]);*/
+
+
+/*app.get("/user", (req,res,next) => {
+    console.log("Handling the route user 2 !!");
+    // res.send("2nd Route Handler");
+    next();
+});
+app.get("/user", (req,res, next) => {
+    console.log("Handling the route user!!");
+    next();
+});*/
+
+
+// GET /users => it checks all the app.xxx("matching route") functions
+// GET /users => middleware chain => request handlet
+
+/*app.use("/", (req,res,next) => {
+    // res.send("Handling / route");
+    next();
+})
+
+app.get(
+    "/user",
+    (req,res,next) => {
+        console.log("Handling / user route");
+        next();
+    },
+    (req,res,next) => {
+        next();
+    },
+    (req,res, next) => {
+    res.send("2nd Route Handler");
+    }
+);*/
+
+const { adminAuth, userAuth } = require("./middlewares/auth");
+
+// Handle Auth MIddleware for all GET, POST, ...request 
+app.use("/admin", adminAuth);
+
+app.post("/user/login", (req,res) => {
+    res.send("User logged in successfully!");
+})
+
+app.get("/user", userAuth, (req,res) => {
+    // logic of checking if the request is authorized
+        res.send("User data sent");
+})
+app.get("/admin/getAllData", (req,res) => {
+    // logic of checking if the request is authorized
+        res.send("All data sent");
+})
+
+app.get("/admin/deleteUser", (req,res) => {
+    res.send("Delete a user");
+})
 
 app.listen(7777, () => {
     console.log("Server is successfully listening on port 3000...");
