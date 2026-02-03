@@ -104,7 +104,7 @@ app.get(
     }
 );*/
 
-const { adminAuth, userAuth } = require("./middlewares/auth");
+/*const { adminAuth, userAuth } = require("./middlewares/auth");
 
 // Handle Auth MIddleware for all GET, POST, ...request 
 app.use("/admin", adminAuth);
@@ -124,8 +124,30 @@ app.get("/admin/getAllData", (req,res) => {
 
 app.get("/admin/deleteUser", (req,res) => {
     res.send("Delete a user");
-})
+})*/
 
+// app.use("/", (err, req, res, next) => {
+//     if(err) {
+//         res.status(500).send("something went wrong");
+//     }
+// });
+app.get("/getUserData", (req,res) => {
+    // try {
+        // logic of Db call and get user data
+        throw new Error("dvbzhjf");
+        res.send("User Data sent");
+
+    // } catch (err) {
+    //     res.status(500).send("Some Error contact support team")
+    // }
+
+});
+
+app.use("/", (err, req, res, next) => {
+    if(err) {
+        res.status(500).send("something went wrong");
+    }
+});
 app.listen(7777, () => {
     console.log("Server is successfully listening on port 3000...");
 });
