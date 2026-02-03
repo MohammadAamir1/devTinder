@@ -40,11 +40,36 @@ app.use("/test", (req,res) => {
  /a/ for any words should be a
  /.*fly$/ end should be with fly*/
 
- app.get("/user/:userId/:name/:password", (req, res) => {
+ /*app.get("/user/:userId/:name/:password", (req, res) => {
     // console.log(req.query)
     console.log(req.params);
     res.send({ firstName: "Aamir", lastName: "Khan" });
-});
+});*/
+
+// app.use("/route", [rH1, rH2,rH3, rH4, rH5]);
+// app.use("/route", [rH1, rH2],rH3, rH4, rH5);
+app.use("/user", [
+    (req,res,next) => {
+    //route handler
+    //res.send("Route Handle 1");
+    console.log("Handling the route user!")
+    next();
+    // res.send("Response!!");
+}, 
+   (req,res,next) => {
+    // route handler 2
+    console.log("Handling the route user 2 !!")
+    // res.send("2nd Response!!");
+    next();
+},
+   (req,res,next) => {
+    // route handler 2
+    console.log("Handling the route user 3 !!")
+    // res.send("3rd Response!!");
+    next();
+},
+]);
+
 app.listen(7777, () => {
     console.log("Server is successfully listening on port 3000...");
 });
