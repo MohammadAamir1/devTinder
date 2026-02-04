@@ -1,6 +1,8 @@
 const express = require("express");
+const connectDB = require("./config/database");
 
 const app = express();
+const User = require("./modals/user");
 
 /*app.use("/hello/2", (req,res) => {
     res.send("Abracadarab");
@@ -131,7 +133,7 @@ app.get("/admin/deleteUser", (req,res) => {
 //         res.status(500).send("something went wrong");
 //     }
 // });
-app.get("/getUserData", (req,res) => {
+/*app.get("/getUserData", (req,res) => {
     // try {
         // logic of Db call and get user data
         throw new Error("dvbzhjf");
@@ -147,7 +149,44 @@ app.use("/", (err, req, res, next) => {
     if(err) {
         res.status(500).send("something went wrong");
     }
-});
-app.listen(7777, () => {
-    console.log("Server is successfully listening on port 3000...");
-});
+});*/
+
+app.post("/signup", async (req,res) => {
+    /*const userObj = {
+        firstName : "Aman",
+        lastName : "Soam",
+        emailId: "Aman@gmail.com",
+        password: "aman@123",
+    }
+    // creating a new instance of the user modal
+    const user = new User(userObj);*/
+
+    const user = new User({
+        firstName : "Virat",
+        lastName : "Kohli",
+        emailId: "kohli@gmail.com",
+        password: "virat@123",
+    });
+    try {
+        await user.save();
+        res.send("User Added successfully");
+    } catch (err) {
+        res.status(400).send("Error saying the user:" + err.message);
+    }
+
+})
+
+connectDB()
+    .then(() => {
+    console.log("Database connection established...");
+    app.listen(7777, () => {
+    console.log("Server is successfully listening on port 7777...");
+    });
+    })
+    .catch((err) => {
+    console.error("database cannot be connected!!");
+    });
+
+/*app.listen(7777, () => {
+    console.log("Server is successfully listening on port 7777...");
+});*/
