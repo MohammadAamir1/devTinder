@@ -151,6 +151,7 @@ app.use("/", (err, req, res, next) => {
     }
 });*/
 
+app.use(express.json());
 app.post("/signup", async (req,res) => {
     /*const userObj = {
         firstName : "Aman",
@@ -161,19 +162,27 @@ app.post("/signup", async (req,res) => {
     // creating a new instance of the user modal
     const user = new User(userObj);*/
 
-    const user = new User({
-        firstName : "Virat",
-        lastName : "Kohli",
-        emailId: "kohli@gmail.com",
-        password: "virat@123",
+    /*const user = new User({
+        firstName : "Ms",
+        lastName : "Dhoni",
+        emailId: "msdhoni@gmail.com",
+        password: "dhoni@123",
     });
     try {
         await user.save();
         res.send("User Added successfully");
     } catch (err) {
         res.status(400).send("Error saying the user:" + err.message);
-    }
+    }*/
 
+        // console.log(req.body);
+        const user = new User(req.body);
+        try {
+            await user.save();
+            res.send("User Added successfully!");
+        } catch (err){
+            res.status(400).send("Error saving the user: " + err.message);
+        }
 })
 
 connectDB()
