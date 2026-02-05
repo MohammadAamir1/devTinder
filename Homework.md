@@ -51,3 +51,10 @@
 - user.findOne with duplicate email ids, which object returned
 - API - Get user by email
 - API - Feed API - GET /feed - get all the users from the database
+- API - Get user by ID
+- create a delete user API
+- difference between Patch and Put
+- API - update a user
+- Explore the Mongoose Documentation for Model methods
+- what are options in a model.findOneAndUpdate method, explore more about it
+- API - Update the user with email ID
