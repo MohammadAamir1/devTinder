@@ -67,3 +67,5 @@
 - add timesamps to the userschema
 - Add API level validation on Patch request & Signup post api
 - DATA Danitizing - ADD API validation  for each field
+- Install validator
+- Explore Validator library function and use validator function for password,email,photoUrl
