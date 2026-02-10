@@ -1,8 +1,9 @@
 const express = require("express");
 const connectDB = require("./config/database");
-
 const app = express();
 const User = require("./modals/user");
+const { validateSignUpData } = require("./utils/validation")
+const bcrypt = require("bcrypt");
 
 /*app.use("/hello/2", (req,res) => {
     res.send("Abracadarab");
@@ -152,6 +153,7 @@ app.use("/", (err, req, res, next) => {
 });*/
 
 app.use(express.json());
+
 app.post("/signup", async (req,res) => {
     /*const userObj = {
         firstName : "Aman",
@@ -175,14 +177,54 @@ app.post("/signup", async (req,res) => {
         res.status(400).send("Error saying the user:" + err.message);
     }*/
 
-        // console.log(req.body);
-        const user = new User(req.body);
-        try {
-            await user.save();
-            res.send("User Added successfully!");
-        } catch (err){
-            res.status(400).send("Error saving the user: " + err.message);
+   try {
+   // Validation of data
+    validateSignUpData(req);
+
+    const { firstName,lastName, emailId, password } = req.body;
+   
+   // Encrypt the password
+    const passwordHash = await bcrypt.hash(password, 10);
+    console.log(passwordHash);
+   
+   // console.log(req.body);
+        // creating a new instance of the user model
+    // const user = new User(req.body); // it is bad way,good way -> explicity mension all fiels
+    const user = new User({
+        firstName,
+        lastName,
+        emailId,
+        password: passwordHash,
+    })
+    await user.save();
+    res.send("User Added successfully!");
+}   catch (err){
+    res.status(400).send("ERROR :  " + err.message);
+    }
+});
+
+app.post("/login", async (req,res) => {
+    try {
+        const { emailId,password } = req.body;
+        
+        const user = await User.findOne({ emailId: emailId});
+        if(!user) {
+            // throw new Error("EmailId is not present in DB");
+            throw new Error("invalid credentials");
         }
+
+        // const isPasswordValid = await bcrypt("Punjab#123","$2b$10$KoKxZAlPsTYTTIpymQnh6eXxJ6K8aEPt/p7514EcS6fhYk06hvnvy");
+        const isPasswordValid = await bcrypt.compare(password,user.password);
+        if(isPasswordValid){
+            res.send("Login Successfull!!!");
+        }
+        else {
+            // throw new Error("Password is not correct");
+            throw new Error("invalid credentials");
+        }
+    } catch (err) {
+        res.status(400).send("ERROR : " + err.message);
+    }
 })
 
 //get user by email
