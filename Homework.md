@@ -96,3 +96,7 @@
 - create routes folder for managing auth,profile, request router
 - create authRouter, profileRouter, requestRouter
 - Import these routers in app.js
+- Create POST /logout API
+- Create PATCH /profile/edit
+- Create PATCH /profile/password AOI => forgot password API
+- Make you validate all data in every POST, PATCH apis
