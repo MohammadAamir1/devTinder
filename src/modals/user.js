@@ -41,11 +41,15 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
         type: String,
-        validate(value){ //it work only new object
-            if(!["male", "female", "others"].includes(value)){
-                throw new Error("Gender data is not valid");
-            }
+        enum: {
+            values: ["male", "female", "other"],
+            message: `{VALUE} is not valid gender type`
         },
+        // validate(value){ //it work only new object
+        //     if(!["male", "female", "others"].includes(value)){
+        //         throw new Error("Gender data is not valid");
+        //     }
+        // },
     },
     photoUrl: {
         type: String,
@@ -68,6 +72,9 @@ const userSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
+
+// userSchema.index({ firstname: 1}); why we use index
+// userSchema.index({ gender: 1});
 
 userSchema.methods.getJWT = async function () {
     const user = this; // this = function not work on arrow function
