@@ -12,15 +12,15 @@
 
 ## connectionRequestRouter
 - POST /request/send/:status/:userId
-- POST /request/send/:status/:userId
+- POST /request/review/:status/:requestId
 
 - POST /request/review/accepted/:requestId
 - POST /request/review/rejected/:requestId
 
 
 ## userRouter
-- GET /user/connection
 - GET /user/requests/received
+- GET /user/connection
 - GET /user/feed - gets you the profile
 
 status: ignore, interested, accepted, rejected

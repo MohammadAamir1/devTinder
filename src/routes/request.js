@@ -62,4 +62,54 @@ requestRouter.post("/request/send/:status/:toUserId",userAuth, async(req,res) =>
     // res.send(user.firstName + " connection request send");
 });
 
+requestRouter.post("/request/review/:status/:requestedId", 
+    userAuth, 
+    async (req,res) => {
+        try {
+            const loggedInUser = req.user;
+            const { status, requestedId } = req.params;
+            console.log("Logged user:", loggedInUser._id.toString());
+
+            const allowedStatus = ["accepted", "rejected"];
+            if(!allowedStatus.includes(status)){
+                return res.status(400).json({
+                    message: "Status not allowed! "
+                });
+            }
+
+            // console.log("Params:", req.params);
+            // console.log("Logged user:", loggedInUser._id);
+            const connectionRequest = await ConnectionRequest.findOne({
+                _id:requestedId,
+                toUserId: loggedInUser._id,
+                status: "interested",
+            });
+
+            if(!connectionRequest) {
+                return res
+                .status(404)
+                .json({ message: "Connection request not found" });
+            }
+            // const connectionRequest = await ConnectionRequest.findById(requestedId);
+
+            // if (!connectionRequest) {
+            //     return res.status(404).json({ message: "No request with this ID" });
+            // }
+
+            console.log("Full document:", connectionRequest);
+            connectionRequest.status = status;
+
+            const data = await connectionRequest.save();
+            res.json({ message: "Connection request " + status, data });
+            // validate the status
+            // Akshay => Elon
+            // is Elon loggedIn == toUserId
+            // status = interested
+            // request Id should be valid
+
+        } catch (err) {
+            res.status(400).send("ERROR: " + err.message);
+        }
+})
+
 module.exports = requestRouter;
